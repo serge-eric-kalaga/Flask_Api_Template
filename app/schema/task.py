@@ -5,3 +5,11 @@ task_model = {
     "title": fields.String(),
     "done": fields.Boolean()
 } 
+
+
+create_task_model = {
+    "title": fields.String(required=True),
+    "done": fields.Boolean(default=False)
+} 
+
+
