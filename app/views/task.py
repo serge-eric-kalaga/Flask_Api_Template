@@ -35,5 +35,16 @@ class GetCreateTask(Resource):
             done = data['done']
         )
         task.save()
-        return response(data=task.to_dict())    
+        return response(data=task.to_dict())  
+    
+      
 
+
+@task_namespace.route("/<int:id_task>")
+class ShowUpdateDeleteTask(Resource):
+    
+    def get(self, id_task:int):
+        """Get a task by id"""
+        
+        task = Task.getOr404(id=id_task)
+        return response(data=task.to_dict())

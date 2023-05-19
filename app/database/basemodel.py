@@ -18,7 +18,7 @@ class BaseModel():
         '''
             get one data, depends on the parameters
         '''
-        data:cls = cls.query.filter_by(**kwargs).first(error)
+        data:cls = cls.query.filter_by(**kwargs).first()
         
         if data is None : raise NotFound(description=f"{cls.__name__} not found !")
         

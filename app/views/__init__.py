@@ -5,7 +5,17 @@ from jwt.exceptions import ExpiredSignatureError
 from sqlalchemy.exc import IntegrityError
 
 
-api = Api(title="Hello world")
+authorizations = {
+        "Bearer Auth":
+        {
+            'type':"apiKey",
+            'in':'header',
+            'name':'Authorization',
+            'description':'Add a JWT with a ** Bearer **\n add Bearer before adding the token'
+        }
+}
+
+api = Api(title="Base Api Flask Template", authorizations=authorizations)
 
 from .task import task_namespace
 
