@@ -2,7 +2,6 @@ from app.utilities.response import response, responseListModel, responseModel
 from ..schema.task import task_model, create_task_model
 from flask_restx import fields, Resource, Namespace
 from app.database.task import Task
-from marshmallow import Schema, fields as fmfields
 from flask import jsonify
 from typing import List
 
