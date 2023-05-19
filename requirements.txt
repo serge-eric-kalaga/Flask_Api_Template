@@ -3,3 +3,4 @@ flask_restx
 Flask-SQLAlchemy
 marshmallow
 flask_json
+flask_jwt_extended
