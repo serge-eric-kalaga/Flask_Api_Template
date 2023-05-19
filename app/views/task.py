@@ -48,3 +48,24 @@ class ShowUpdateDeleteTask(Resource):
         
         task = Task.getOr404(id=id_task)
         return response(data=task.to_dict())
+    
+    
+    def delete(self, id_task:int):
+        """Delete a task by id"""
+        
+        task = Task.getOr404(id=id_task)
+        task.delete()
+        return response(data=f"Task {id_task} deleted !")
+    
+    
+    @task_namespace.expect(create_task_model_)
+    def put(self, id_task:int):
+        """Update a task by id"""
+        
+        task = Task.getOr404(id=id_task)
+        data = task_namespace.payload
+        task.title = data['title'] if data['title'] else None
+        task.done = data['done'] if data['done'] else None
+        task.save()
+        
+        return response(data=f"Task {id_task} updated !")
