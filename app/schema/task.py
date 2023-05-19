@@ -1,4 +1,6 @@
-from marshmallow import Schema, fields
+from flask_restx import fields
+
+
 
 task_model = {
     "id": fields.Integer(),
