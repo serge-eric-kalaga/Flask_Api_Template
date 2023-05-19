@@ -1,6 +1,7 @@
 from . import db
+from .basemodel import BaseModel
 
-class Task(db.Model):
+class Task(db.Model, BaseModel):
     __tablename__='task'
     
     id = db.Column(db.Integer, primary_key=True)
@@ -16,24 +17,3 @@ class Task(db.Model):
             'title': self.title,
             'done': self.done
         }
-                
-    @classmethod
-    def get(cls, username):
-        if id=="" or id==None :
-            raise NotFound()
-        return cls.query.filter_by(username=username).first_or_404("Account Not Found")
-    
-    @classmethod
-    def delete(cls, username):
-        user = cls.get(username)
-        db.session.delete(user)
-        db.session.commit()
-        # return user
-    
-    @classmethod
-    def getAll(cls):
-        return cls.query.all()
-    
-    def add(self):
-        db.session.add(self)
-        db.session.commit()
