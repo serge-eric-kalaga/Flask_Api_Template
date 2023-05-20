@@ -8,7 +8,7 @@ def response(status:int=1, data:Any="", status_code=200) -> Dict :
     return var
 
 
-def baseModel(name: str, namespace: object, dataModel: fields.Raw) -> Dict:
+def validationModel(name: str, namespace: object, dataModel: fields.Raw) -> Dict:
     resp = namespace.model(name, dataModel)
     return resp
 
@@ -29,6 +29,7 @@ def responseListModel(name: str, namespace: object, dataModel: fields.Raw) -> Di
         'data': fields.List(fields.Nested(dataModel))
     })
     return resp
+
 
 
 
