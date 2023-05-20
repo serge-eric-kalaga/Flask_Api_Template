@@ -1,0 +1,41 @@
+from flask_restx import Resource, Namespace
+from app.schema.user import login_model
+from app.utilities.response import response, validationModel
+from flask_jwt_extended import create_access_token, create_refresh_token 
+from werkzeug.security import check_password_hash
+from werkzeug.exceptions import Unauthorized
+from app.database.user import User
+
+
+auth_namespace = Namespace("Auth", description="Auth routes")
+login_validation_model = validationModel("LoginModel", auth_namespace, login_model)
+
+@auth_namespace.route("/login")
+class Auth(Resource):
+    
+    @auth_namespace.expect(login_validation_model)
+    def post(self):
+        """User authentication"""
+        
+        data = auth_namespace.payload
+        
+        if not data.get("username") or not data.get("password"):
+            raise ValueError("Username/password is required !")
+        
+        user_exist = User.getOrNone(username=data['username'])
+        
+        if user_exist is None or \
+             not check_password_hash(user_exist.password, data.get('password')) :
+                raise Unauthorized(description="Incorrect username/password !")
+        
+        token = create_access_token(user_exist.username)
+        
+        return response(data={
+            "username" : user_exist.username,
+            "token" : token
+        })
+            
+        
+        
+        
+        

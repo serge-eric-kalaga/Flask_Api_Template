@@ -16,3 +16,8 @@ update_user_model = {
     "username": fields.String(required=False),
     "password": fields.String(required=False)
 } 
+
+login_model = {
+    "username": fields.String(required=False),
+    "password": fields.String(required=False)
+}

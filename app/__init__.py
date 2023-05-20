@@ -16,7 +16,7 @@ def start_app():
     
     db.init_app(app) 
     
-    # jwt = JWTManager(app=app)
+    jwt = JWTManager(app=app)
     
     with app.app_context():
         db.create_all()   
