@@ -48,6 +48,15 @@ class ShowDeleteUpdateUser(Resource):
 
         user = User.getOr404(username=username)
         return response(data=user)
+    
+    
+    def delete(self, username):
+        """Delete user"""
+        
+        user = User.getOr404(username=username)
+        user.delete()
+        
+        return response(data="User deleted !")
         
 
 
