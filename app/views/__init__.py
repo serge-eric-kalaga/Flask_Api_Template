@@ -74,3 +74,8 @@ def integrityError(error):
 @api.marshal_with(error_model)
 def conflict(error):
     return {"status":False, "status_code": 409,  "message":f"{error}"}
+
+@api.errorhandler(ValueError)
+@api.marshal_with(error_model)
+def valueError(error):
+    return {"status":False, "status_code": 400,  "message":f"{error}"}
