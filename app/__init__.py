@@ -3,6 +3,7 @@ from flask_restx import Api
 from .views import api
 from app.database import db
 from app.configs import Config
+from flask_jwt_extended import JWTManager
 
 
 def start_app():
@@ -14,6 +15,8 @@ def start_app():
     api.init_app(app)
     
     db.init_app(app) 
+    
+    # jwt = JWTManager(app=app)
     
     with app.app_context():
         db.create_all()   
