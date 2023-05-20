@@ -23,6 +23,15 @@ class BaseModel():
         if data is None : raise NotFound(description=f"{cls.__name__} not found !")
         
         return data
+
+    @classmethod
+    def getOrNone(cls, **kwargs):
+        '''
+            get one data, depends on the parameters
+        '''
+        data:cls = cls.query.filter_by(**kwargs).first()
+        
+        return data
     
     @classmethod
     def getAllFilterBy(cls, **kwargs):

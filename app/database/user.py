@@ -11,8 +11,8 @@ class User(db.Model, BaseModel):
     
     def __init__(self, username:str, password:str):
         self.username = username
-        
-        if " " in self.password : 
-            raise ValueError("Le nom d'utilisateur ne peut contenir un espace !")
         self.password = generate_password_hash(password=password)
+        
+        if " " in self.username : 
+            raise ValueError("Le nom d'utilisateur ne peut contenir un espace !")
     
