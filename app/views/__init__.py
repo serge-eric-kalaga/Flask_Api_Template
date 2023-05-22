@@ -15,7 +15,7 @@ authorizations = {
         }
 }
 
-api = Api(title="Base Api Flask Template", authorizations=authorizations)
+api = Api(title="Base Api Flask Template", authorizations=authorizations, security='Bearer Auth')
 
 from .task import task_namespace
 from .auth.user import user_namespace

@@ -44,7 +44,7 @@ class GetCreateUser(Resource):
 class ShowDeleteUpdateUser(Resource):
 
     @user_namespace.marshal_with(user_marshal_model)
-    def get(self, username:str):
+    def get(self, username:str) :
         """Get user details"""
 
         user = User.getOr404(username=username)
@@ -72,8 +72,7 @@ class ShowDeleteUpdateUser(Resource):
         user.save()
         
         return response(data=f"User {username} updated")
+    
+    
+
         
-        
-
-
-

@@ -1,7 +1,8 @@
 from flask_restx import Resource, Namespace
 from app.schema.user import login_model
 from app.utilities.response import response, validationModel
-from flask_jwt_extended import create_access_token, create_refresh_token 
+from flask_jwt_extended import create_access_token, create_refresh_token, \
+    get_jwt_identity, jwt_required
 from werkzeug.security import check_password_hash
 from werkzeug.exceptions import Unauthorized
 from app.database.user import User
@@ -28,12 +29,25 @@ class Auth(Resource):
              not check_password_hash(user_exist.password, data.get('password')) :
                 raise Unauthorized(description="Incorrect username/password !")
         
-        token = create_access_token(user_exist.username)
+        token = create_access_token({"username":user_exist.username})
         
         return response(data={
             "username" : user_exist.username,
             "token" : token
         })
+        
+     
+
+@auth_namespace.route("/current-user")
+class AuthUserIdentity(Resource):
+       
+    @jwt_required()
+    def get(self):
+        """Actual user identity"""
+        
+        username = get_jwt_identity()
+        
+        return response(data=username)
             
         
         
