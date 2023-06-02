@@ -20,8 +20,10 @@ api = Api(title="Base Api Flask Template", authorizations=authorizations, securi
 from .task import task_namespace
 from .auth.user import user_namespace
 from .auth.auth import auth_namespace
+from .tenants.tenant import tenant_namespace
 
 
+api.add_namespace(tenant_namespace, path="/tenant")
 api.add_namespace(task_namespace, path="/task")
 api.add_namespace(user_namespace, path="/user")
 api.add_namespace(auth_namespace, path="/auth")

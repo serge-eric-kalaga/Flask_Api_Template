@@ -1,7 +1,7 @@
 from app.utilities.response import response, responseListModel, responseModel, validationModel
 from ..schema.task import task_model, create_task_model
 from flask_restx import Resource, Namespace
-from app.database.task import Task
+from app.database.models import Task
 
 from flask import jsonify
 

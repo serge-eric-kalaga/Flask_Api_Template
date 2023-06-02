@@ -4,11 +4,14 @@ from .views import api
 from app.database import db
 from app.configs import Config
 from flask_jwt_extended import JWTManager
+import os
 
 
 def start_app():
     
     app = Flask(__name__)
+    
+    app.secret_key = os.urandom(42)
     
     app.config.from_object(Config)
     

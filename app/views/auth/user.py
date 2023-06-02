@@ -2,7 +2,7 @@ from app.utilities.response import response, responseListModel, responseModel, v
 from app.schema.user import user_model, create_user_model, update_user_model
 from flask_restx import Resource, fields, Namespace
 from werkzeug.exceptions import Conflict
-from app.database.user import User
+from app.database.models import User
 
 
 user_namespace = Namespace(name="User", description="User routes")
