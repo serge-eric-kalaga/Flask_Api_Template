@@ -6,6 +6,7 @@ from flask_jwt_extended import create_access_token, create_refresh_token, \
 from werkzeug.security import check_password_hash
 from werkzeug.exceptions import Unauthorized
 from app.database.tenant import Tenant
+from werkzeug.exceptions import Conflict
 
 
 tenant_namespace = Namespace("Tenant", description="Tenant routes")
@@ -23,3 +24,16 @@ class CreateGetTenant(Resource):
         
         tenants = Tenant.getAll()
         return response(data=tenants)
+    
+    @tenant_namespace.expect(create_tenant_model)
+    def post(self):
+        """Create a new tenant"""
+        data = tenant_namespace.payload
+        tenant_exist = Tenant.getOrNone(name=data['name'])
+        if tenant_exist is not None :
+            raise Conflict("Ce tenant exist deja !")
+        
+        new_tenant = Tenant(**data)
+        new_tenant.save()
+        
+        return response(data="Tenant Created")
