@@ -7,6 +7,9 @@ from werkzeug.security import check_password_hash
 from werkzeug.exceptions import Unauthorized
 from app.database.tenant import Tenant
 from werkzeug.exceptions import Conflict
+from werkzeug.exceptions import InternalServerError
+from app.database.tenant_manager import all_tenants, create_database, create_session
+from flask import current_app
 
 
 tenant_namespace = Namespace("Tenant", description="Tenant routes")
@@ -32,6 +35,15 @@ class CreateGetTenant(Resource):
         tenant_exist = Tenant.getOrNone(name=data['name'])
         if tenant_exist is not None :
             raise Conflict("Ce tenant exist deja !")
+        
+        
+        create_database(data['name'])
+        
+        
+        try:
+            create_database(data['name'])
+        except Exception as e:
+            raise InternalServerError(f"Erreur lors de la création de la base de données : {str(e)}")
         
         new_tenant = Tenant(**data)
         new_tenant.save()

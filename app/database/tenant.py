@@ -1,7 +1,10 @@
+# from . import  Base
 from . import db
 from .basemodel import BaseModel
+from sqlalchemy import Integer, String, Column
 
 class Tenant(db.Model, BaseModel):
+    __tablename__ = "tenant"
 
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100), nullable=False)

@@ -2,7 +2,10 @@ from app.utilities.response import response, responseListModel, responseModel, v
 from app.schema.user import user_model, create_user_model, update_user_model
 from flask_restx import Resource, fields, Namespace
 from werkzeug.exceptions import Conflict
-from app.database.models import User
+from app.database.tenantmodels.models import User
+from werkzeug.exceptions import NotFound
+from app.database import get_db
+from app.database.tenant_manager import create_database, create_session
 
 
 user_namespace = Namespace(name="User", description="User routes")
@@ -20,23 +23,31 @@ class GetCreateUser(Resource):
     @user_namespace.marshal_with(user_list_marshal_model)
     def get(self):
         """Get all users list"""
+        get_session = create_session("string")
+        db = get_session["session"]
 
-        users = User.getAll()
+        users = User.getAll(db)
         return response(data=users)
 
 
     @user_namespace.expect(create_user_validation_model)
     def post(self):
         """Create user"""
+        
+        get_session = create_session("string")
+        db = get_session["session"]
+        if not db:
+            raise NotFound("Tenant not found")
 
         data = user_namespace.payload
-        user_exist = User.getOrNone(username=data['username'])
+        user_exist = User.getOrNone(username=data['username'], db=db)
 
         if user_exist :
             raise Conflict(description=f"User with username {data['username']} already exist !")
 
         user = User(**data)
-        user.save()
+        # user.save()
+        user.save(db)
         return response(data="User created !")
 
 

@@ -1,13 +1,15 @@
-from . import db
-from .basemodel import BaseModel
+# from . import  Base
+from .. import TenantBase
 from werkzeug.security import generate_password_hash
+from sqlalchemy import String, Integer, Boolean, Column
+from ..tenant_basemodel import TenantsBaseModel
 
 
-class User(db.Model, BaseModel):
+class User(TenantsBaseModel, TenantBase):
     __tablename__ = "user"
     
-    username = db.Column(db.String(80), primary_key=True)
-    password = db.Column(db.String(80), nullable=False)
+    username = Column(String(80), primary_key=True)
+    password = Column(String(80), nullable=False)
     
     def __init__(self, username:str, password:str):
         self.username = username
@@ -18,12 +20,12 @@ class User(db.Model, BaseModel):
         
 
 
-class Task(db.Model, BaseModel):
+class Task(TenantsBaseModel, TenantBase):
     __tablename__='task'
     
-    id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(80), nullable=False, unique=True)
-    done = db.Column(db.Boolean, default=False)
+    id = Column(Integer, primary_key=True)
+    title = Column(String(80), nullable=False, unique=True)
+    done = Column(Boolean, default=False)
     
     def __repr__(self):
         return f'<Task {self.id} {self.title} {self.done}>'

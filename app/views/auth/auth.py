@@ -5,7 +5,7 @@ from flask_jwt_extended import create_access_token, create_refresh_token, \
     get_jwt_identity, jwt_required
 from werkzeug.security import check_password_hash
 from werkzeug.exceptions import Unauthorized
-from app.database.models import User, Task
+from app.database.tenantmodels.models import User, Task
 
 
 auth_namespace = Namespace("Auth", description="Auth routes")
