@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 from .tenantmodels.models import Task, User
 from app.database.tenant import Tenant
@@ -9,9 +9,6 @@ def create_database(db_uri: str):
     """
     Crée une base de données donnée selon son URI
     """
-    # engine = create_engine(f"sqlite:///{db_uri}.db")
-    # Session = sessionmaker(bind=engine)
-    # db_session = TenantDBSession()
     get_session = create_session(db_uri)
     session = get_session["session"]
     engine = get_session["engine"]
@@ -21,10 +18,12 @@ def create_database(db_uri: str):
     TenantBase.metadata.create_all(engine)
     
     
-def create_session(tenant_db_uri):
+def create_session(tenant_name):
     """Etablir une connexion avec une base de donnees"""
-    engine = create_engine(f"sqlite:///{tenant_db_uri}.db")
+    if tenant_name not in all_tenants() : return None
+    engine = create_engine(f"sqlite:///tenants_databases/{tenant_name}.db")        
     Session = sessionmaker(bind=engine)
+        
     db_session = Session()
     return {
         "session": db_session,

@@ -17,11 +17,11 @@ user_marshal_model = responseModel("user_marshal_model", user_namespace, user_re
 user_list_marshal_model = responseListModel("user_list_marshal_model", user_namespace, user_response_model)
 
 
-@user_namespace.route("/")
+@user_namespace.route("/<string:tenant>")
 class GetCreateUser(Resource):
     
     @user_namespace.marshal_with(user_list_marshal_model)
-    def get(self):
+    def get(self, tenant):
         """Get all users list"""
         get_session = create_session("string")
         db = get_session["session"]
@@ -31,14 +31,17 @@ class GetCreateUser(Resource):
 
 
     @user_namespace.expect(create_user_validation_model)
-    def post(self):
+    def post(self, tenant):
         """Create user"""
         
-        get_session = create_session("string")
-        db = get_session["session"]
-        if not db:
+        get_session = create_session(tenant)
+        print(get_session)
+        
+        if get_session is None:
             raise NotFound("Tenant not found")
 
+        db = get_session["session"]
+        
         data = user_namespace.payload
         user_exist = User.getOrNone(username=data['username'], db=db)
 
@@ -51,18 +54,18 @@ class GetCreateUser(Resource):
         return response(data="User created !")
 
 
-@user_namespace.route("/<string:username>")    
+@user_namespace.route("/<string:tenant>/<string:username>")    
 class ShowDeleteUpdateUser(Resource):
 
     @user_namespace.marshal_with(user_marshal_model)
-    def get(self, username:str) :
+    def get(self, tenant, username:str) :
         """Get user details"""
 
         user = User.getOr404(username=username)
         return response(data=user)
     
     
-    def delete(self, username):
+    def delete(self, tenant, username):
         """Delete user"""
         
         user = User.getOr404(username=username)
@@ -72,7 +75,7 @@ class ShowDeleteUpdateUser(Resource):
     
     
     @user_namespace.expect(update_user_validation_model)
-    def put(self, username):
+    def put(self, tenant, username):
         """Update user"""
         
         data = user_namespace.payload
